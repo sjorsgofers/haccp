@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <meta name="theme-color" content="#2563eb" />
+
+  <!-- PWA / iPad "Toevoegen aan beginscherm" -->
+  <link rel="manifest" href="manifest.json" />
+  <meta name="mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+  <meta name="apple-mobile-web-app-title" content="Labels" />
+  <link rel="apple-touch-icon" href="logo.png" />
+
+  <title>Keuken Labels</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <header class="topbar">
+    <a href="/" class="brand" aria-label="Keuken Labels">
+      <img src="logo.png" alt="Keuken Labels" class="brand-logo"
+           onerror="this.outerHTML='<span class=&quot;brand-text&quot;>Keuken Labels</span>'">
+    </a>
+    <nav class="tabs">
+      <button class="tab active" data-view="print">Print</button>
+      <button class="tab" data-view="manage">Beheer</button>
+    </nav>
+    <div id="printer-pill" class="printer-pill checking" title="Printerstatus">
+      <span class="dot"></span><span class="label">Printer…</span>
+    </div>
+
+    <div class="date-cluster">
+      <button id="btn-uitgehaald" class="date-side date-side-left" title="Print sticker: Uitgehaald op vandaag (uit vriezer)">
+        <span class="side-top">UITGEHAALD</span>
+        <span class="side-bot">op</span>
+      </button>
+
+      <button id="date-hero" class="date-hero" aria-label="Print sticker met datum vandaag" title="Tik om sticker te printen">
+        <div class="date-hero-content">
+          <div class="date-hero-label">VANDAAG</div>
+          <div class="date-hero-date" id="hero-date-main">—</div>
+          <div class="date-hero-sub">
+            <span id="hero-date-day">—</span>
+          </div>
+        </div>
+        <div class="date-hero-icon" aria-hidden="true">
+          <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="6 9 6 2 18 2 18 9"></polyline>
+            <path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"></path>
+            <rect x="6" y="14" width="12" height="8"></rect>
+          </svg>
+        </div>
+      </button>
+
+      <button id="btn-multi" class="date-side date-side-right" title="Print meerdere datum-stickers achter elkaar">
+        <span class="multi-x">×</span>
+        <span class="multi-label">aantal</span>
+      </button>
+    </div>
+  </header>
+
+  <!-- VIEW: PRINT -->
+  <section id="view-print" class="view active">
+    <div class="toolbar">
+      <input
+        id="search"
+        class="search"
+        type="search"
+        placeholder="Zoek product…"
+        autocomplete="off"
+      />
+      <div id="alphabet" class="alphabet"></div>
+    </div>
+    <div id="product-grid" class="grid"></div>
+    <p id="empty-print" class="empty hidden">Geen producten gevonden.</p>
+  </section>
+
+  <!-- VIEW: MANAGE -->
+  <section id="view-manage" class="view">
+    <div class="manage-section">
+      <div class="section-head">
+        <h2>Producten <span id="product-count" class="count-pill"></span></h2>
+        <button class="btn btn-primary" id="btn-new-product">+ Nieuw product</button>
+      </div>
+      <div id="product-list" class="list"></div>
+    </div>
+  </section>
+
+  <!-- TOAST -->
+  <div id="toast" class="toast"></div>
+
+  <!-- MODAL: aantal datum-stickers -->
+  <div id="modal-multi" class="modal hidden">
+    <div class="modal-card">
+      <h3>Hoeveel datum-stickers?</h3>
+      <p class="modal-sub">De Brother print ze direct achter elkaar in één opdracht.</p>
+      <div class="qty-quick" id="mf-quick">
+        <button type="button" data-qty="1">1</button>
+        <button type="button" data-qty="3">3</button>
+        <button type="button" data-qty="5" class="active">5</button>
+        <button type="button" data-qty="10">10</button>
+        <button type="button" data-qty="25">25</button>
+      </div>
+      <label>Of zelf invoeren <span class="label-hint">(max 50)</span>
+        <input id="mf-qty" type="number" min="1" max="50" value="5" inputmode="numeric" />
+      </label>
+      <div class="modal-actions">
+        <button class="btn btn-ghost" id="mf-cancel">Annuleren</button>
+        <button class="btn btn-primary" id="mf-print">Print →</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL: product -->
+  <div id="modal-product" class="modal hidden">
+    <div class="modal-card modal-card-lg">
+      <h3 id="modal-product-title">Nieuw product</h3>
+      <label>Naam<input id="pf-name" type="text" autocomplete="off" /></label>
+      <label>Houdbaarheid (dagen)
+        <input id="pf-days" type="number" min="1" max="365" value="2" inputmode="numeric" />
+      </label>
+      <label>Allergenen <span class="label-hint">(tik om te wisselen: Niet → Bevat → Sporen)</span>
+        <div id="pf-allergens" class="allergen-grid"></div>
+      </label>
+      <div class="modal-actions">
+        <button class="btn btn-ghost" id="pf-cancel">Annuleren</button>
+        <button class="btn btn-primary" id="pf-save">Opslaan</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>
