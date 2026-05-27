@@ -1,138 +1,937 @@
-<!DOCTYPE html>
-<html lang="nl">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-  <meta name="theme-color" content="#2563eb" />
+<!--
+  Inschrijfformulier - De Kickboksschool (Weert)
+  Eén bestand. Plakken in WordPress Custom HTML / Elementor HTML-widget.
+  Vervang YOUR_WEB3FORMS_ACCESS_KEY hieronder door je echte Web3Forms access key.
+-->
+<div id="dks-wrapper">
+  <style>
+    /* Scope alle stijlen onder #dks-wrapper zodat WordPress-thema's niet botsen */
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
 
-  <!-- PWA / iPad "Toevoegen aan beginscherm" -->
-  <link rel="manifest" href="manifest.json" />
-  <meta name="mobile-web-app-capable" content="yes" />
-  <meta name="apple-mobile-web-app-capable" content="yes" />
-  <meta name="apple-mobile-web-app-status-bar-style" content="default" />
-  <meta name="apple-mobile-web-app-title" content="Labels" />
-  <link rel="apple-touch-icon" href="logo.png" />
+    #dks-wrapper {
+      --dks-bg: #f5f5f7;
+      --dks-card: #ffffff;
+      --dks-text: #1a1a1a;
+      --dks-muted: #5a5a5a;
+      --dks-border: #d8d8dc;
+      --dks-border-strong: #1a1a1a;
+      --dks-accent: #1a1a1a;
+      --dks-accent-hover: #000000;
+      --dks-error: #c0241c;
+      --dks-success-bg: #e9f6ec;
+      --dks-success-border: #2e7d32;
+      --dks-warning-bg: #fff4e0;
+      --dks-warning-border: #b56a00;
+      --dks-radius: 8px;
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+      color: var(--dks-text);
+      background: var(--dks-bg);
+      padding: 24px 12px;
+      box-sizing: border-box;
+      width: 100%;
+      line-height: 1.5;
+      font-size: 16px;
+    }
+    #dks-wrapper *,
+    #dks-wrapper *::before,
+    #dks-wrapper *::after { box-sizing: border-box; }
 
-  <title>Keuken Labels</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="style.css" />
-</head>
-<body>
-  <header class="topbar">
-    <a href="/" class="brand" aria-label="Keuken Labels">
-      <img src="logo.png" alt="Keuken Labels" class="brand-logo"
-           onerror="this.outerHTML='<span class=&quot;brand-text&quot;>Keuken Labels</span>'">
-    </a>
-    <nav class="tabs">
-      <button class="tab active" data-view="print">Print</button>
-      <button class="tab" data-view="manage">Beheer</button>
-    </nav>
-    <div id="printer-pill" class="printer-pill checking" title="Printerstatus">
-      <span class="dot"></span><span class="label">Printer…</span>
-    </div>
+    #dks-wrapper .dks-card {
+      max-width: 640px;
+      margin: 0 auto;
+      background: var(--dks-card);
+      border: 1px solid var(--dks-border);
+      border-radius: var(--dks-radius);
+      padding: 28px 24px;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.04);
+    }
 
-    <div class="date-cluster">
-      <button id="btn-uitgehaald" class="date-side date-side-left" title="Print sticker: Uitgehaald op vandaag (uit vriezer)">
-        <span class="side-top">UITGEHAALD</span>
-        <span class="side-bot">op</span>
-      </button>
+    #dks-wrapper h2.dks-title {
+      font-size: 24px;
+      font-weight: 700;
+      margin: 0 0 6px;
+      letter-spacing: -0.01em;
+    }
+    #dks-wrapper p.dks-intro {
+      margin: 0 0 24px;
+      color: var(--dks-muted);
+      font-size: 15px;
+    }
 
-      <button id="date-hero" class="date-hero" aria-label="Print sticker met datum vandaag" title="Tik om sticker te printen">
-        <div class="date-hero-content">
-          <div class="date-hero-label">VANDAAG</div>
-          <div class="date-hero-date" id="hero-date-main">—</div>
-          <div class="date-hero-sub">
-            <span id="hero-date-day">—</span>
+    #dks-wrapper h3.dks-section {
+      font-size: 17px;
+      font-weight: 700;
+      margin: 28px 0 12px;
+      padding-bottom: 6px;
+      border-bottom: 2px solid var(--dks-accent);
+      letter-spacing: -0.005em;
+    }
+    #dks-wrapper h3.dks-section:first-of-type { margin-top: 4px; }
+
+    #dks-wrapper .dks-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 14px;
+    }
+    #dks-wrapper .dks-row-3 {
+      display: grid;
+      grid-template-columns: 2fr 1fr 1fr;
+      gap: 14px;
+    }
+    @media (max-width: 520px) {
+      #dks-wrapper .dks-row,
+      #dks-wrapper .dks-row-3 { grid-template-columns: 1fr; }
+    }
+
+    #dks-wrapper .dks-field {
+      display: flex;
+      flex-direction: column;
+      margin-bottom: 14px;
+    }
+    #dks-wrapper label.dks-label {
+      font-size: 14px;
+      font-weight: 600;
+      margin-bottom: 6px;
+      color: var(--dks-text);
+    }
+    #dks-wrapper .dks-required {
+      color: var(--dks-error);
+      margin-left: 2px;
+      font-weight: 700;
+    }
+
+    #dks-wrapper input[type="text"],
+    #dks-wrapper input[type="email"],
+    #dks-wrapper input[type="tel"],
+    #dks-wrapper input[type="date"],
+    #dks-wrapper select {
+      width: 100%;
+      font-family: inherit;
+      font-size: 16px;
+      line-height: 1.4;
+      padding: 11px 12px;
+      border: 1px solid var(--dks-border);
+      border-radius: var(--dks-radius);
+      background: #fff;
+      color: var(--dks-text);
+      transition: border-color 0.15s, box-shadow 0.15s;
+      -webkit-appearance: none;
+      appearance: none;
+    }
+    #dks-wrapper select {
+      background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'><path fill='%231a1a1a' d='M6 8 0 0h12z'/></svg>");
+      background-repeat: no-repeat;
+      background-position: right 14px center;
+      background-size: 10px;
+      padding-right: 36px;
+    }
+    #dks-wrapper input:hover,
+    #dks-wrapper select:hover { border-color: #9a9aa1; }
+    #dks-wrapper input:focus,
+    #dks-wrapper select:focus {
+      outline: none;
+      border-color: var(--dks-border-strong);
+      box-shadow: 0 0 0 3px rgba(26,26,26,0.12);
+    }
+
+    #dks-wrapper .dks-error-input {
+      border-color: var(--dks-error) !important;
+      box-shadow: 0 0 0 3px rgba(192,36,28,0.10) !important;
+    }
+    #dks-wrapper .dks-error {
+      display: none;
+      color: var(--dks-error);
+      font-size: 13px;
+      font-weight: 700;
+      margin-top: 5px;
+    }
+    #dks-wrapper .dks-error.dks-show { display: block; }
+
+    #dks-wrapper .dks-checkbox {
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      margin-bottom: 12px;
+      cursor: pointer;
+    }
+    #dks-wrapper .dks-checkbox input[type="checkbox"] {
+      flex: 0 0 auto;
+      width: 18px;
+      height: 18px;
+      margin: 3px 0 0;
+      accent-color: var(--dks-accent);
+      cursor: pointer;
+    }
+    #dks-wrapper .dks-checkbox-label {
+      font-size: 14px;
+      color: var(--dks-text);
+      line-height: 1.45;
+    }
+    #dks-wrapper .dks-checkbox-label a {
+      color: var(--dks-accent);
+      text-decoration: underline;
+    }
+
+    #dks-wrapper .dks-help {
+      font-size: 13px;
+      color: var(--dks-muted);
+      margin: 4px 0 16px;
+      line-height: 1.5;
+    }
+    #dks-wrapper .dks-privacy {
+      font-size: 12.5px;
+      color: var(--dks-muted);
+      margin: 8px 0 18px;
+      line-height: 1.55;
+    }
+
+    #dks-wrapper .dks-warning {
+      display: none;
+      background: var(--dks-warning-bg);
+      border: 1px solid var(--dks-warning-border);
+      color: #6e3f00;
+      padding: 10px 12px;
+      border-radius: var(--dks-radius);
+      font-size: 13.5px;
+      font-weight: 500;
+      margin-top: 8px;
+    }
+    #dks-wrapper .dks-warning.dks-show { display: block; }
+
+    #dks-wrapper .dks-guardian {
+      display: none;
+    }
+    #dks-wrapper .dks-guardian.dks-show {
+      display: block;
+    }
+
+    #dks-wrapper .dks-submit {
+      width: 100%;
+      font-family: inherit;
+      font-size: 16px;
+      font-weight: 700;
+      letter-spacing: 0.02em;
+      padding: 14px 18px;
+      margin-top: 18px;
+      background: var(--dks-accent);
+      color: #fff;
+      border: none;
+      border-radius: var(--dks-radius);
+      cursor: pointer;
+      transition: background-color 0.15s, transform 0.05s;
+    }
+    #dks-wrapper .dks-submit:hover { background: var(--dks-accent-hover); }
+    #dks-wrapper .dks-submit:focus {
+      outline: none;
+      box-shadow: 0 0 0 3px rgba(26,26,26,0.30);
+    }
+    #dks-wrapper .dks-submit:active { transform: translateY(1px); }
+    #dks-wrapper .dks-submit[disabled] {
+      background: #6e6e74;
+      cursor: not-allowed;
+      transform: none;
+    }
+    #dks-wrapper .dks-spinner {
+      display: inline-block;
+      width: 14px;
+      height: 14px;
+      border: 2px solid rgba(255,255,255,0.4);
+      border-top-color: #fff;
+      border-radius: 50%;
+      animation: dks-spin 0.7s linear infinite;
+      vertical-align: -2px;
+      margin-right: 8px;
+    }
+    @keyframes dks-spin { to { transform: rotate(360deg); } }
+
+    #dks-wrapper .dks-form-error {
+      display: none;
+      background: #fdecea;
+      border: 1px solid var(--dks-error);
+      color: #7a1813;
+      padding: 12px 14px;
+      border-radius: var(--dks-radius);
+      font-size: 14px;
+      font-weight: 500;
+      margin-bottom: 16px;
+    }
+    #dks-wrapper .dks-form-error.dks-show { display: block; }
+
+    #dks-wrapper .dks-success {
+      background: var(--dks-success-bg);
+      border: 1px solid var(--dks-success-border);
+      color: #1b4d22;
+      padding: 22px 22px;
+      border-radius: var(--dks-radius);
+      text-align: center;
+    }
+    #dks-wrapper .dks-success h2 {
+      font-size: 22px;
+      font-weight: 700;
+      margin: 0 0 12px;
+    }
+    #dks-wrapper .dks-success p {
+      margin: 0 0 8px;
+      font-size: 15px;
+      line-height: 1.55;
+    }
+    #dks-wrapper .dks-success p:last-child { margin-bottom: 0; }
+
+    /* Honeypot - verborgen voor mensen, zichtbaar voor bots */
+    #dks-wrapper .dks-hp {
+      position: absolute !important;
+      left: -10000px !important;
+      top: auto !important;
+      width: 1px !important;
+      height: 1px !important;
+      overflow: hidden !important;
+    }
+  </style>
+
+  <div class="dks-card" id="dks-card">
+    <h2 class="dks-title">Inschrijven bij De Kickboksschool</h2>
+    <p class="dks-intro">Vul onderstaand formulier in om je in te schrijven. Velden met <span class="dks-required">*</span> zijn verplicht.</p>
+
+    <div class="dks-form-error" id="dks-form-error" role="alert" aria-live="assertive"></div>
+
+    <form id="dks-form" novalidate autocomplete="on">
+
+      <!-- Honeypot tegen spambots -->
+      <div class="dks-hp" aria-hidden="true">
+        <label for="dks-website">Laat dit veld leeg</label>
+        <input type="text" id="dks-website" name="botcheck" tabindex="-1" autocomplete="off">
+      </div>
+
+      <!-- Persoonsgegevens -->
+      <h3 class="dks-section">Persoonsgegevens</h3>
+
+      <div class="dks-row-3">
+        <div class="dks-field">
+          <label class="dks-label" for="dks-voornaam">Voornaam<span class="dks-required" aria-hidden="true">*</span></label>
+          <input type="text" id="dks-voornaam" name="voornaam" autocomplete="given-name" required aria-required="true">
+          <div class="dks-error" id="dks-err-voornaam">Vul je voornaam in.</div>
+        </div>
+        <div class="dks-field">
+          <label class="dks-label" for="dks-tussenvoegsel">Tussenvoegsel</label>
+          <input type="text" id="dks-tussenvoegsel" name="tussenvoegsel" autocomplete="additional-name" placeholder="van, de">
+        </div>
+        <div class="dks-field">
+          <label class="dks-label" for="dks-achternaam">Achternaam<span class="dks-required" aria-hidden="true">*</span></label>
+          <input type="text" id="dks-achternaam" name="achternaam" autocomplete="family-name" required aria-required="true">
+          <div class="dks-error" id="dks-err-achternaam">Vul je achternaam in.</div>
+        </div>
+      </div>
+
+      <div class="dks-row">
+        <div class="dks-field">
+          <label class="dks-label" for="dks-geboortedatum">Geboortedatum<span class="dks-required" aria-hidden="true">*</span></label>
+          <input type="text" id="dks-geboortedatum" name="geboortedatum"
+                 placeholder="DD-MM-YYYY" inputmode="numeric"
+                 autocomplete="bday" maxlength="10" required aria-required="true">
+          <div class="dks-error" id="dks-err-geboortedatum">Vul een geldige geboortedatum in (DD-MM-YYYY).</div>
+        </div>
+        <div class="dks-field">
+          <label class="dks-label" for="dks-geslacht">Geslacht</label>
+          <select id="dks-geslacht" name="geslacht">
+            <option value="">— Maak een keuze —</option>
+            <option value="Man">Man</option>
+            <option value="Vrouw">Vrouw</option>
+            <option value="Anders">Anders</option>
+            <option value="Zeg ik liever niet">Zeg ik liever niet</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="dks-row">
+        <div class="dks-field">
+          <label class="dks-label" for="dks-email">E-mailadres<span class="dks-required" aria-hidden="true">*</span></label>
+          <input type="email" id="dks-email" name="email" autocomplete="email" required aria-required="true">
+          <div class="dks-error" id="dks-err-email">Vul een geldig e-mailadres in.</div>
+        </div>
+        <div class="dks-field">
+          <label class="dks-label" for="dks-telefoon">Telefoonnummer<span class="dks-required" aria-hidden="true">*</span></label>
+          <input type="tel" id="dks-telefoon" name="telefoon" autocomplete="tel"
+                 placeholder="06 12345678" required aria-required="true">
+          <div class="dks-error" id="dks-err-telefoon">Vul een geldig telefoonnummer in.</div>
+        </div>
+      </div>
+
+      <!-- Adres -->
+      <h3 class="dks-section">Adres</h3>
+
+      <div class="dks-field">
+        <label class="dks-label" for="dks-straat">Straat<span class="dks-required" aria-hidden="true">*</span></label>
+        <input type="text" id="dks-straat" name="straat" autocomplete="address-line1" required aria-required="true">
+        <div class="dks-error" id="dks-err-straat">Vul je straatnaam in.</div>
+      </div>
+
+      <div class="dks-row-3">
+        <div class="dks-field">
+          <label class="dks-label" for="dks-huisnummer">Huisnummer<span class="dks-required" aria-hidden="true">*</span></label>
+          <input type="text" id="dks-huisnummer" name="huisnummer" required aria-required="true">
+          <div class="dks-error" id="dks-err-huisnummer">Vul je huisnummer in.</div>
+        </div>
+        <div class="dks-field">
+          <label class="dks-label" for="dks-toevoeging">Toevoeging</label>
+          <input type="text" id="dks-toevoeging" name="toevoeging" placeholder="A, bis…">
+        </div>
+        <div class="dks-field">
+          <label class="dks-label" for="dks-postcode">Postcode<span class="dks-required" aria-hidden="true">*</span></label>
+          <input type="text" id="dks-postcode" name="postcode" autocomplete="postal-code"
+                 placeholder="1234 AB" maxlength="7" required aria-required="true">
+          <div class="dks-error" id="dks-err-postcode">Geldige postcode, bijv. 1234 AB.</div>
+        </div>
+      </div>
+
+      <div class="dks-row">
+        <div class="dks-field">
+          <label class="dks-label" for="dks-woonplaats">Woonplaats<span class="dks-required" aria-hidden="true">*</span></label>
+          <input type="text" id="dks-woonplaats" name="woonplaats" autocomplete="address-level2" required aria-required="true">
+          <div class="dks-error" id="dks-err-woonplaats">Vul je woonplaats in.</div>
+        </div>
+        <div class="dks-field">
+          <label class="dks-label" for="dks-land">Land<span class="dks-required" aria-hidden="true">*</span></label>
+          <select id="dks-land" name="land" required aria-required="true">
+            <option value="Nederland" selected>Nederland</option>
+            <option value="België">België</option>
+            <option value="Duitsland">Duitsland</option>
+            <option value="Luxemburg">Luxemburg</option>
+            <option value="Overig">Overig</option>
+          </select>
+          <div class="dks-error" id="dks-err-land">Kies een land.</div>
+        </div>
+      </div>
+
+      <!-- Abonnement -->
+      <h3 class="dks-section">Abonnement</h3>
+
+      <div class="dks-field">
+        <label class="dks-label" for="dks-abonnement">Gewenst abonnement<span class="dks-required" aria-hidden="true">*</span></label>
+        <select id="dks-abonnement" name="abonnement" required aria-required="true">
+          <option value="">— Maak een keuze —</option>
+          <option value="Kids &amp; teens (8–17 jr) — 1× per week — € 25,00 p/m">Kids &amp; teens (8–17 jr) — 1× per week — € 25,00 p/m</option>
+          <option value="Kids &amp; teens (8–17 jr) — 2× per week — € 33,00 p/m">Kids &amp; teens (8–17 jr) — 2× per week — € 33,00 p/m</option>
+          <option value="Kids &amp; teens (8–17 jr) — Onbeperkt — € 41,00 p/m">Kids &amp; teens (8–17 jr) — Onbeperkt — € 41,00 p/m</option>
+          <option value="Volwassenen (18+) — 1× per week — € 38,00 p/m">Volwassenen (18+) — 1× per week — € 38,00 p/m</option>
+          <option value="Volwassenen (18+) — 2× per week — € 48,00 p/m">Volwassenen (18+) — 2× per week — € 48,00 p/m</option>
+          <option value="Volwassenen (18+) — Onbeperkt — € 58,00 p/m">Volwassenen (18+) — Onbeperkt — € 58,00 p/m</option>
+        </select>
+        <div class="dks-error" id="dks-err-abonnement">Kies een abonnement.</div>
+        <div class="dks-warning" id="dks-warning-leeftijd" role="alert" aria-live="polite">
+          Dit abonnement is bedoeld voor een andere leeftijdsgroep.
+        </div>
+      </div>
+
+      <div class="dks-field">
+        <label class="dks-label" for="dks-startdatum">Gewenste startdatum<span class="dks-required" aria-hidden="true">*</span></label>
+        <input type="date" id="dks-startdatum" name="startdatum" required aria-required="true">
+        <div class="dks-error" id="dks-err-startdatum">Kies een startdatum vanaf vandaag.</div>
+      </div>
+
+      <!-- Betaling -->
+      <h3 class="dks-section">Betaling</h3>
+
+      <div class="dks-field">
+        <label class="dks-label" for="dks-iban">IBAN<span class="dks-required" aria-hidden="true">*</span></label>
+        <input type="text" id="dks-iban" name="iban" autocomplete="off"
+               placeholder="NL00 BANK 0000 0000 00" maxlength="34" required aria-required="true"
+               spellcheck="false">
+        <div class="dks-error" id="dks-err-iban">Vul een geldig Nederlands IBAN in (bijv. NL00BANK0123456789).</div>
+      </div>
+
+      <label class="dks-checkbox" for="dks-incasso">
+        <input type="checkbox" id="dks-incasso" name="incasso" required aria-required="true">
+        <span class="dks-checkbox-label">
+          Ik ga akkoord met automatische incasso van het lesgeld vanaf het opgegeven IBAN. De officiële SEPA-machtiging ontvang ik per e-mail.<span class="dks-required" aria-hidden="true">*</span>
+        </span>
+      </label>
+      <div class="dks-error" id="dks-err-incasso">Akkoord met automatische incasso is verplicht.</div>
+
+      <!-- Ouder / voogd (conditioneel) -->
+      <div class="dks-guardian" id="dks-guardian" aria-hidden="true">
+        <h3 class="dks-section">Ouder / voogd</h3>
+        <p class="dks-help" style="margin-top:-6px;">Omdat de inschrijver op de startdatum jonger dan 18 jaar is, vragen we onderstaande gegevens.</p>
+
+        <div class="dks-field">
+          <label class="dks-label" for="dks-voogd-naam">Naam ouder/voogd<span class="dks-required dks-guardian-req" aria-hidden="true">*</span></label>
+          <input type="text" id="dks-voogd-naam" name="voogd_naam" autocomplete="name">
+          <div class="dks-error" id="dks-err-voogd-naam">Vul de naam van ouder of voogd in.</div>
+        </div>
+
+        <div class="dks-row">
+          <div class="dks-field">
+            <label class="dks-label" for="dks-voogd-email">E-mailadres ouder/voogd<span class="dks-required dks-guardian-req" aria-hidden="true">*</span></label>
+            <input type="email" id="dks-voogd-email" name="voogd_email" autocomplete="email">
+            <div class="dks-error" id="dks-err-voogd-email">Vul een geldig e-mailadres in.</div>
+          </div>
+          <div class="dks-field">
+            <label class="dks-label" for="dks-voogd-telefoon">Telefoonnummer ouder/voogd<span class="dks-required dks-guardian-req" aria-hidden="true">*</span></label>
+            <input type="tel" id="dks-voogd-telefoon" name="voogd_telefoon" autocomplete="tel">
+            <div class="dks-error" id="dks-err-voogd-telefoon">Vul een geldig telefoonnummer in.</div>
           </div>
         </div>
-        <div class="date-hero-icon" aria-hidden="true">
-          <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <polyline points="6 9 6 2 18 2 18 9"></polyline>
-            <path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"></path>
-            <rect x="6" y="14" width="12" height="8"></rect>
-          </svg>
-        </div>
-      </button>
 
-      <button id="btn-multi" class="date-side date-side-right" title="Print meerdere datum-stickers achter elkaar">
-        <span class="multi-x">×</span>
-        <span class="multi-label">aantal</span>
-      </button>
-    </div>
-  </header>
-
-  <!-- VIEW: PRINT -->
-  <section id="view-print" class="view active">
-    <div class="toolbar">
-      <input
-        id="search"
-        class="search"
-        type="search"
-        placeholder="Zoek product…"
-        autocomplete="off"
-      />
-      <div id="alphabet" class="alphabet"></div>
-    </div>
-    <div id="product-grid" class="grid"></div>
-    <p id="empty-print" class="empty hidden">Geen producten gevonden.</p>
-  </section>
-
-  <!-- VIEW: MANAGE -->
-  <section id="view-manage" class="view">
-    <div class="manage-section">
-      <div class="section-head">
-        <h2>Producten <span id="product-count" class="count-pill"></span></h2>
-        <button class="btn btn-primary" id="btn-new-product">+ Nieuw product</button>
+        <label class="dks-checkbox" for="dks-voogd-akkoord">
+          <input type="checkbox" id="dks-voogd-akkoord" name="voogd_akkoord">
+          <span class="dks-checkbox-label">
+            Ik geef als ouder/voogd toestemming voor deelname.<span class="dks-required dks-guardian-req" aria-hidden="true">*</span>
+          </span>
+        </label>
+        <div class="dks-error" id="dks-err-voogd-akkoord">Toestemming van ouder/voogd is verplicht.</div>
       </div>
-      <div id="product-list" class="list"></div>
-    </div>
-  </section>
 
-  <!-- TOAST -->
-  <div id="toast" class="toast"></div>
+      <!-- Akkoorden -->
+      <h3 class="dks-section">Akkoorden</h3>
 
-  <!-- MODAL: aantal datum-stickers -->
-  <div id="modal-multi" class="modal hidden">
-    <div class="modal-card">
-      <h3>Hoeveel datum-stickers?</h3>
-      <p class="modal-sub">De Brother print ze direct achter elkaar in één opdracht.</p>
-      <div class="qty-quick" id="mf-quick">
-        <button type="button" data-qty="1">1</button>
-        <button type="button" data-qty="3">3</button>
-        <button type="button" data-qty="5" class="active">5</button>
-        <button type="button" data-qty="10">10</button>
-        <button type="button" data-qty="25">25</button>
-      </div>
-      <label>Of zelf invoeren <span class="label-hint">(max 50)</span>
-        <input id="mf-qty" type="number" min="1" max="50" value="5" inputmode="numeric" />
+      <label class="dks-checkbox" for="dks-av">
+        <input type="checkbox" id="dks-av" name="av" required aria-required="true">
+        <span class="dks-checkbox-label">
+          Ik ga akkoord met de <a href="https://dekickboksschool.nl/algemene-voorwaarden/" target="_blank" rel="noopener noreferrer">algemene voorwaarden</a>.<span class="dks-required" aria-hidden="true">*</span>
+        </span>
       </label>
-      <div class="modal-actions">
-        <button class="btn btn-ghost" id="mf-cancel">Annuleren</button>
-        <button class="btn btn-primary" id="mf-print">Print →</button>
-      </div>
-    </div>
+      <div class="dks-error" id="dks-err-av">Akkoord met de algemene voorwaarden is verplicht.</div>
+
+      <label class="dks-checkbox" for="dks-privacy">
+        <input type="checkbox" id="dks-privacy" name="privacy" required aria-required="true">
+        <span class="dks-checkbox-label">
+          Ik ga akkoord met de <a href="https://dekickboksschool.nl/privacy-policy/" target="_blank" rel="noopener noreferrer">privacyverklaring</a>.<span class="dks-required" aria-hidden="true">*</span>
+        </span>
+      </label>
+      <div class="dks-error" id="dks-err-privacy">Akkoord met de privacyverklaring is verplicht.</div>
+
+      <p class="dks-privacy">
+        De Kickboksschool verwerkt jouw gegevens (inclusief IBAN) voor je inschrijving en het uitvoeren van je lidmaatschap. Je gegevens worden opgeslagen in onze ledenadministratie (Virtuagym) en alleen gebruikt voor de uitvoering van het lidmaatschap en communicatie hierover. Zie de privacyverklaring voor meer informatie.
+      </p>
+
+      <!-- Hidden velden voor Web3Forms -->
+      <input type="hidden" name="access_key" value="9eb2f512-c0b8-4f8a-a863-8bd56b001cc5">
+      <input type="hidden" name="from_name" value="Inschrijfformulier De Kickboksschool">
+      <input type="hidden" name="subject" id="dks-subject" value="Inschrijving De Kickboksschool">
+      <input type="hidden" name="message" id="dks-message" value="">
+
+      <button type="submit" class="dks-submit" id="dks-submit">Inschrijving versturen</button>
+    </form>
   </div>
 
-  <!-- MODAL: product -->
-  <div id="modal-product" class="modal hidden">
-    <div class="modal-card modal-card-lg">
-      <h3 id="modal-product-title">Nieuw product</h3>
-      <label>Naam<input id="pf-name" type="text" autocomplete="off" /></label>
-      <label>Houdbaarheid (dagen)
-        <input id="pf-days" type="number" min="1" max="365" value="2" inputmode="numeric" />
-      </label>
-      <label>Allergenen <span class="label-hint">(tik om te wisselen: Niet → Bevat → Sporen)</span>
-        <div id="pf-allergens" class="allergen-grid"></div>
-      </label>
-      <div class="modal-actions">
-        <button class="btn btn-ghost" id="pf-cancel">Annuleren</button>
-        <button class="btn btn-primary" id="pf-save">Opslaan</button>
-      </div>
-    </div>
-  </div>
+  <script>
+  (function () {
+    'use strict';
 
-  <script src="app.js"></script>
-</body>
-</html>
+    var $ = function (id) { return document.getElementById(id); };
+
+    var form          = $('dks-form');
+    var card          = $('dks-card');
+    var submitBtn     = $('dks-submit');
+    var formError     = $('dks-form-error');
+    var guardianBlock = $('dks-guardian');
+    var warningAge    = $('dks-warning-leeftijd');
+
+    var fldGeboorte   = $('dks-geboortedatum');
+    var fldStart      = $('dks-startdatum');
+    var fldAbo        = $('dks-abonnement');
+    var fldPostcode   = $('dks-postcode');
+    var fldIban       = $('dks-iban');
+    var fldTelefoon   = $('dks-telefoon');
+
+    // ---------- Startdatum min = vandaag ----------
+    (function setMinDate() {
+      var d = new Date();
+      var iso = d.getFullYear() + '-' +
+                String(d.getMonth() + 1).padStart(2, '0') + '-' +
+                String(d.getDate()).padStart(2, '0');
+      fldStart.setAttribute('min', iso);
+    })();
+
+    // ---------- Input mask: geboortedatum DD-MM-YYYY ----------
+    fldGeboorte.addEventListener('input', function (e) {
+      var raw = e.target.value.replace(/\D/g, '').slice(0, 8);
+      var out = raw;
+      if (raw.length > 4)      out = raw.slice(0,2) + '-' + raw.slice(2,4) + '-' + raw.slice(4);
+      else if (raw.length > 2) out = raw.slice(0,2) + '-' + raw.slice(2);
+      e.target.value = out;
+      onAgeRelevantChange();
+    });
+    fldGeboorte.addEventListener('blur', validateGeboorte);
+
+    // ---------- IBAN: spaties weg, hoofdletters ----------
+    fldIban.addEventListener('input', function (e) {
+      var v = e.target.value.replace(/\s+/g, '').toUpperCase();
+      e.target.value = v;
+    });
+
+    // ---------- Postcode: normaliseer naar "1234 AB" ----------
+    fldPostcode.addEventListener('blur', function (e) {
+      var v = e.target.value.trim().toUpperCase().replace(/\s+/g, '');
+      var m = v.match(/^(\d{4})([A-Z]{2})$/);
+      if (m) e.target.value = m[1] + ' ' + m[2];
+    });
+
+    // ---------- Telefoon: alleen toegestane tekens ----------
+    fldTelefoon.addEventListener('input', function (e) {
+      e.target.value = e.target.value.replace(/[^\d+\-\s()]/g, '');
+    });
+
+    // ---------- Leeftijd-logica ----------
+    fldStart.addEventListener('change', onAgeRelevantChange);
+    fldAbo.addEventListener('change', onAgeRelevantChange);
+
+    function parseDDMMYYYY(s) {
+      var m = (s || '').match(/^(\d{2})-(\d{2})-(\d{4})$/);
+      if (!m) return null;
+      var d = parseInt(m[1], 10), mo = parseInt(m[2], 10), y = parseInt(m[3], 10);
+      var dt = new Date(y, mo - 1, d);
+      if (dt.getFullYear() !== y || dt.getMonth() !== mo - 1 || dt.getDate() !== d) return null;
+      return dt;
+    }
+    function parseISODate(s) {
+      var m = (s || '').match(/^(\d{4})-(\d{2})-(\d{2})$/);
+      if (!m) return null;
+      var y = parseInt(m[1], 10), mo = parseInt(m[2], 10), d = parseInt(m[3], 10);
+      var dt = new Date(y, mo - 1, d);
+      if (dt.getFullYear() !== y || dt.getMonth() !== mo - 1 || dt.getDate() !== d) return null;
+      return dt;
+    }
+    function ageOnDate(birth, refDate) {
+      var age = refDate.getFullYear() - birth.getFullYear();
+      var m = refDate.getMonth() - birth.getMonth();
+      if (m < 0 || (m === 0 && refDate.getDate() < birth.getDate())) age--;
+      return age;
+    }
+
+    function onAgeRelevantChange() {
+      var birth = parseDDMMYYYY(fldGeboorte.value);
+      var start = parseISODate(fldStart.value) || new Date();
+      var showGuardian = false;
+      var isMinor = null;
+
+      if (birth) {
+        var age = ageOnDate(birth, start);
+        isMinor = age < 18;
+        showGuardian = isMinor;
+      }
+
+      toggleGuardian(showGuardian);
+
+      // Waarschuwing leeftijdscategorie abonnement
+      warningAge.classList.remove('dks-show');
+      if (birth && fldAbo.value) {
+        var isKidsAbo = /Kids\s*&amp;|Kids\s*&/.test(fldAbo.value) || fldAbo.value.indexOf('Kids') === 0;
+        var isAdultAbo = fldAbo.value.indexOf('Volwassenen') === 0;
+        if (isMinor === false && isKidsAbo) warningAge.classList.add('dks-show');
+        if (isMinor === true && isAdultAbo) warningAge.classList.add('dks-show');
+      }
+    }
+
+    function toggleGuardian(show) {
+      var inputs = guardianBlock.querySelectorAll('input');
+      if (show) {
+        guardianBlock.classList.add('dks-show');
+        guardianBlock.setAttribute('aria-hidden', 'false');
+        inputs.forEach(function (i) {
+          if (i.type === 'checkbox') i.required = true;
+          else i.required = true;
+          i.setAttribute('aria-required', 'true');
+        });
+      } else {
+        guardianBlock.classList.remove('dks-show');
+        guardianBlock.setAttribute('aria-hidden', 'true');
+        inputs.forEach(function (i) {
+          i.required = false;
+          i.removeAttribute('aria-required');
+          // Velden niet wissen — gebruiker kan tussen >=18 en <18 wisselen
+        });
+      }
+    }
+
+    // ---------- Validatie ----------
+    function setError(fieldId, errId, show) {
+      var f = $(fieldId), e = $(errId);
+      if (!f || !e) return;
+      if (show) {
+        f.classList.add('dks-error-input');
+        e.classList.add('dks-show');
+        f.setAttribute('aria-invalid', 'true');
+      } else {
+        f.classList.remove('dks-error-input');
+        e.classList.remove('dks-show');
+        f.removeAttribute('aria-invalid');
+      }
+    }
+    function setCheckboxError(fieldId, errId, show) {
+      var f = $(fieldId), e = $(errId);
+      if (!f || !e) return;
+      if (show) { e.classList.add('dks-show'); f.setAttribute('aria-invalid', 'true'); }
+      else      { e.classList.remove('dks-show'); f.removeAttribute('aria-invalid'); }
+    }
+
+    function validateGeboorte() {
+      var v = fldGeboorte.value.trim();
+      var ok = /^\d{2}-\d{2}-\d{4}$/.test(v) && parseDDMMYYYY(v) !== null;
+      if (ok) {
+        var d = parseDDMMYYYY(v);
+        var today = new Date(); today.setHours(0,0,0,0);
+        if (d > today) ok = false;
+        if (d.getFullYear() < 1900) ok = false;
+      }
+      setError('dks-geboortedatum', 'dks-err-geboortedatum', !ok);
+      return ok;
+    }
+
+    var emailRe = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    var ibanRe  = /^NL\d{2}[A-Z]{4}\d{10}$/;
+    var pcRe    = /^\d{4}\s?[A-Za-z]{2}$/;
+    var phoneRe = /^[\d\s+\-()]{8,}$/;
+
+    function validateAll() {
+      var ok = true;
+
+      function req(id, errId) {
+        var v = $(id).value.trim();
+        var bad = !v;
+        setError(id, errId, bad);
+        if (bad) ok = false;
+        return !bad;
+      }
+
+      req('dks-voornaam',   'dks-err-voornaam');
+      req('dks-achternaam', 'dks-err-achternaam');
+
+      if (!validateGeboorte()) ok = false;
+
+      // Email
+      var emailVal = $('dks-email').value.trim();
+      if (!emailRe.test(emailVal)) { setError('dks-email', 'dks-err-email', true); ok = false; }
+      else setError('dks-email', 'dks-err-email', false);
+
+      // Telefoon
+      var telVal = $('dks-telefoon').value.trim();
+      if (!phoneRe.test(telVal)) { setError('dks-telefoon', 'dks-err-telefoon', true); ok = false; }
+      else setError('dks-telefoon', 'dks-err-telefoon', false);
+
+      // Adres
+      req('dks-straat',     'dks-err-straat');
+      req('dks-huisnummer', 'dks-err-huisnummer');
+
+      var pcVal = $('dks-postcode').value.trim();
+      if (!pcRe.test(pcVal)) { setError('dks-postcode', 'dks-err-postcode', true); ok = false; }
+      else setError('dks-postcode', 'dks-err-postcode', false);
+
+      req('dks-woonplaats', 'dks-err-woonplaats');
+      req('dks-land',       'dks-err-land');
+
+      // Abonnement + startdatum
+      req('dks-abonnement', 'dks-err-abonnement');
+
+      var startVal = $('dks-startdatum').value;
+      var startD = parseISODate(startVal);
+      var today = new Date(); today.setHours(0,0,0,0);
+      if (!startD || startD < today) {
+        setError('dks-startdatum', 'dks-err-startdatum', true); ok = false;
+      } else setError('dks-startdatum', 'dks-err-startdatum', false);
+
+      // IBAN
+      var ibanVal = $('dks-iban').value.replace(/\s+/g, '').toUpperCase();
+      $('dks-iban').value = ibanVal;
+      if (!ibanRe.test(ibanVal)) { setError('dks-iban', 'dks-err-iban', true); ok = false; }
+      else setError('dks-iban', 'dks-err-iban', false);
+
+      // Incasso checkbox
+      if (!$('dks-incasso').checked) { setCheckboxError('dks-incasso', 'dks-err-incasso', true); ok = false; }
+      else setCheckboxError('dks-incasso', 'dks-err-incasso', false);
+
+      // Ouder/voogd (alleen als zichtbaar)
+      if (guardianBlock.classList.contains('dks-show')) {
+        req('dks-voogd-naam', 'dks-err-voogd-naam');
+
+        var vEm = $('dks-voogd-email').value.trim();
+        if (!emailRe.test(vEm)) { setError('dks-voogd-email', 'dks-err-voogd-email', true); ok = false; }
+        else setError('dks-voogd-email', 'dks-err-voogd-email', false);
+
+        var vTel = $('dks-voogd-telefoon').value.trim();
+        if (!phoneRe.test(vTel)) { setError('dks-voogd-telefoon', 'dks-err-voogd-telefoon', true); ok = false; }
+        else setError('dks-voogd-telefoon', 'dks-err-voogd-telefoon', false);
+
+        if (!$('dks-voogd-akkoord').checked) { setCheckboxError('dks-voogd-akkoord', 'dks-err-voogd-akkoord', true); ok = false; }
+        else setCheckboxError('dks-voogd-akkoord', 'dks-err-voogd-akkoord', false);
+      }
+
+      // Akkoorden
+      if (!$('dks-av').checked) { setCheckboxError('dks-av', 'dks-err-av', true); ok = false; }
+      else setCheckboxError('dks-av', 'dks-err-av', false);
+
+      if (!$('dks-privacy').checked) { setCheckboxError('dks-privacy', 'dks-err-privacy', true); ok = false; }
+      else setCheckboxError('dks-privacy', 'dks-err-privacy', false);
+
+      return ok;
+    }
+
+    // ---------- Helpers voor e-mailbody ----------
+    function v(id) { return ($(id).value || '').trim(); }
+    function vOrDash(id) { var x = v(id); return x ? x : '-'; }
+    function chk(id) { return $(id).checked ? 'Ja' : 'Nee'; }
+    function isoToDDMMYYYY(iso) {
+      var m = (iso || '').match(/^(\d{4})-(\d{2})-(\d{2})$/);
+      if (!m) return iso || '';
+      return m[3] + '-' + m[2] + '-' + m[1];
+    }
+    function normalizedPostcode() {
+      var pcVal = v('dks-postcode').toUpperCase().replace(/\s+/g, '');
+      var m = pcVal.match(/^(\d{4})([A-Z]{2})$/);
+      return m ? m[1] + ' ' + m[2] : pcVal;
+    }
+    function nowStamp() {
+      var d = new Date();
+      var pad = function (n) { return String(n).padStart(2, '0'); };
+      return pad(d.getDate()) + '-' + pad(d.getMonth() + 1) + '-' + d.getFullYear() +
+             ' ' + pad(d.getHours()) + ':' + pad(d.getMinutes());
+    }
+
+    function buildBody() {
+      var minor = guardianBlock.classList.contains('dks-show');
+
+      var voornaam     = v('dks-voornaam');
+      var tussenvoegsel= vOrDash('dks-tussenvoegsel');
+      var achternaam   = v('dks-achternaam');
+      var geboorte     = v('dks-geboortedatum');
+      var geslacht     = vOrDash('dks-geslacht');
+      var email        = v('dks-email');
+      var telefoon     = v('dks-telefoon');
+
+      var straat       = v('dks-straat');
+      var huisnummer   = v('dks-huisnummer');
+      var toevoeging   = vOrDash('dks-toevoeging');
+      var postcode     = normalizedPostcode();
+      var woonplaats   = v('dks-woonplaats');
+      var land         = v('dks-land');
+
+      var abonnement   = v('dks-abonnement');
+      var startdatum   = isoToDDMMYYYY(v('dks-startdatum'));
+
+      var iban         = v('dks-iban').replace(/\s+/g, '').toUpperCase();
+      var incasso      = chk('dks-incasso');
+
+      var voogdNaam    = minor ? (v('dks-voogd-naam')     || 'n.v.t.') : 'n.v.t.';
+      var voogdEmail   = minor ? (v('dks-voogd-email')    || 'n.v.t.') : 'n.v.t.';
+      var voogdTel     = minor ? (v('dks-voogd-telefoon') || 'n.v.t.') : 'n.v.t.';
+      var voogdAkk     = minor ? chk('dks-voogd-akkoord') : 'n.v.t.';
+
+      var av           = $('dks-av').checked      ? 'Akkoord' : '—';
+      var pv           = $('dks-privacy').checked ? 'Akkoord' : '—';
+
+      var lines = [];
+      lines.push('NIEUWE INSCHRIJVING');
+      lines.push('');
+      lines.push('# Persoonsgegevens');
+      lines.push('Voornaam: ' + voornaam);
+      lines.push('Tussenvoegsel: ' + tussenvoegsel);
+      lines.push('Achternaam: ' + achternaam);
+      lines.push('Geboortedatum: ' + geboorte);
+      lines.push('Geslacht: ' + geslacht);
+      lines.push('E-mailadres: ' + email);
+      lines.push('Telefoonnummer: ' + telefoon);
+      lines.push('');
+      lines.push('# Adres');
+      lines.push('Straat: ' + straat);
+      lines.push('Huisnummer: ' + huisnummer);
+      lines.push('Toevoeging: ' + toevoeging);
+      lines.push('Postcode: ' + postcode);
+      lines.push('Woonplaats: ' + woonplaats);
+      lines.push('Land: ' + land);
+      lines.push('');
+      lines.push('# Abonnement');
+      lines.push('Abonnement: ' + abonnement);
+      lines.push('Gewenste startdatum: ' + startdatum);
+      lines.push('');
+      lines.push('# Betaling');
+      lines.push('IBAN: ' + iban);
+      lines.push('Akkoord automatische incasso: ' + incasso);
+      lines.push('');
+      lines.push('# Ouder / voogd');
+      lines.push('Naam ouder/voogd: ' + voogdNaam);
+      lines.push('E-mailadres ouder/voogd: ' + voogdEmail);
+      lines.push('Telefoonnummer ouder/voogd: ' + voogdTel);
+      lines.push('Akkoord ouder/voogd: ' + voogdAkk);
+      lines.push('');
+      lines.push('# Akkoorden');
+      lines.push('Algemene voorwaarden: ' + av);
+      lines.push('Privacyverklaring: ' + pv);
+      lines.push('');
+      lines.push('---');
+      lines.push('Datum inschrijving: ' + nowStamp());
+      lines.push('Bron: Inschrijfformulier dekickboksschool.nl/inschrijven');
+
+      return lines.join('\n');
+    }
+
+    function buildSubject() {
+      var voornaam   = v('dks-voornaam');
+      var achternaam = v('dks-achternaam');
+      return 'Inschrijving "De Kickboksschool" — ' + voornaam + ' ' + achternaam;
+    }
+
+    // ---------- Submit ----------
+    form.addEventListener('submit', function (e) {
+      e.preventDefault();
+      formError.classList.remove('dks-show');
+      formError.textContent = '';
+
+      if (!validateAll()) {
+        // Scroll naar eerste fout
+        var firstErr = card.querySelector('.dks-error-input, .dks-error.dks-show');
+        if (firstErr) firstErr.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        return;
+      }
+
+      $('dks-subject').value = buildSubject();
+      $('dks-message').value = buildBody();
+
+      submitBtn.disabled = true;
+      var originalLabel = submitBtn.innerHTML;
+      submitBtn.innerHTML = '<span class="dks-spinner" aria-hidden="true"></span>Bezig met versturen…';
+
+      var fd = new FormData(form);
+
+      fetch('https://api.web3forms.com/submit', {
+        method: 'POST',
+        headers: { 'Accept': 'application/json' },
+        body: fd
+      })
+      .then(function (res) {
+        if (res.status === 200) return res.json().then(function (j) { return { ok: true, json: j }; });
+        return res.json().then(function (j) { return { ok: false, json: j }; })
+                        .catch(function () { return { ok: false, json: null }; });
+      })
+      .then(function (result) {
+        if (result.ok) {
+          showSuccess();
+        } else {
+          showFailure();
+        }
+      })
+      .catch(function () {
+        showFailure();
+      });
+    });
+
+    function showSuccess() {
+      card.innerHTML =
+        '<div class="dks-success" role="status" aria-live="polite">' +
+          '<h2>Bedankt voor je inschrijving!</h2>' +
+          '<p>We hebben je gegevens goed ontvangen. Je krijgt zo snel mogelijk een bevestiging per e-mail.</p>' +
+          '<p>Tot snel!</p>' +
+        '</div>';
+      try { card.scrollIntoView({ behavior: 'smooth', block: 'start' }); } catch (_) {}
+    }
+
+    function showFailure() {
+      submitBtn.disabled = false;
+      submitBtn.innerHTML = 'Inschrijving versturen';
+      formError.innerHTML =
+        'Er ging iets mis bij het versturen van je inschrijving. Probeer het opnieuw, of mail je gegevens rechtstreeks naar ' +
+        '<a href="mailto:info@dekickboksschool.nl">info@dekickboksschool.nl</a>.';
+      formError.classList.add('dks-show');
+      try { formError.scrollIntoView({ behavior: 'smooth', block: 'center' }); } catch (_) {}
+    }
+  })();
+  </script>
+</div>
